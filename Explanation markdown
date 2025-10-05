@@ -1,0 +1,27 @@
+Flow
+
+The flow of my package is divided into 3 separate nodes
+  1. set_mode_client. pretty self-explanatory: changes the mode into guided mode
+  2. depth_maintain_publisher. Runs after node 1, subscribes to /mavros/global_position/rel_alt to get depth, if depth is not within 1.6 to 1.9 it will adjust accordingly until the desired depth is reached using a constant speed. 
+It will continue checking for deviations from that range and make adjustments
+  3. nav_publisher. Does not include Obstacle Avoidance for red_flare. In general the steps it takes are:
+        1) checks if the gate is on screen
+        2) if not, do a constant counter-clockwise rotation until it is found
+        3) if yes, or if its found, centers it until the x value in the BoundaryBoxArray falls in between 0.46 and 0.54 (pretty good values found through trial and error, though not perfect by any means)
+        4) Begins to approach the gate. It determines the distances from the gate using the h value, if h is less than 0.3 (or 0.4 i dont remember the value anymore) it will approach quickly, if its between that and 0.75 it will approach slowly.
+        5) Once h > 0.75, it will calculate the ratio between the height and the width of the gate's boundary box. 
+I found that the ideal ratio is generally above 0.45 as that would mean the angle of approach is good (a small ratio would mean that we are looking at the gate from the side)
+        6A) If it determines the determines the gate ratio to be higher than 0.426, then it would accelerate forward quickly for around 2-3 seconds (the code is slept temporarily to prevent unwanted action in the middle of movement)
+By then it'll (hopefully) go through the gate successfully. The code then goes back to step 1)
+        6B) If it determines the gate ratio to be lower than 0.426, it will move sideways to the right for 2-3 seconds (code is also slept). Then it will go back to step 1)
+
+Thoughts and Reasoning
+- I made the depth maintain publisher because we only have one gate at a static depth, so eliminating any variability in the height axis makes the decision tree much simpler. 
+It also allows it to have the height be constant for a set range, therefore we can relatively understand how far we are from the object. From there I measured the width on the flat side with h=0.75
+- I realized that the ratio between width and height is very important to knowing the ROV's angle of approach, flat side would give a value close to 1, while approaching from the side or seeing just the gate pole would give close to 0
+I dont really see a different way of doing this, but it would be cool to see what others come up with!
+- My implementation is generally not robust and highly specialized for this purpose. With more time I could probably make the decision tree deeper and more nuanced
+- I have an idea to implement obstacle avoidance. As usual we do the height analysis (ratio no need because its just tubular), then we can compare the height of the gate to see if its in front or behing the gate.
+If its behind the gate then we can take the x value between the border of the gate and the centre of the red_flare and move slowly. When we are close to the flare we can make further adjustments.
+- I started around 2PM today so yey speedrun :D
+
