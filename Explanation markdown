@@ -4,7 +4,7 @@ The flow of my package is divided into 3 separate nodes
   1. set_mode_client. pretty self-explanatory: changes the mode into guided mode
   2. depth_maintain_publisher. Runs after node 1, subscribes to /mavros/global_position/rel_alt to get depth, if depth is not within 1.6 to 1.9 it will adjust accordingly until the desired depth is reached using a constant speed. 
 It will continue checking for deviations from that range and make adjustments
-  3. nav_publisher. Does not include Obstacle Avoidance for red_flare. In general the steps it takes are:
+  3. nav_publisher. Does not include Obstacle Avoidance for red_flare. Runs 10 seconds after depth_maintain_publisher. In general the steps it takes are:
         1) checks if the gate is on screen
         2) if not, do a constant counter-clockwise rotation until it is found
         3) if yes, or if its found, centers it until the x value in the BoundaryBoxArray falls in between 0.46 and 0.54 (pretty good values found through trial and error, though not perfect by any means)
