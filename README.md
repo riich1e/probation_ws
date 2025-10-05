@@ -1,4 +1,4 @@
-Name: Fakhri Rasyiid
+Name: Fakhri R
 
 Launch the program using the command:
 ros2 launch solution_pkg solution_launch.py
