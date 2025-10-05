@@ -3,6 +3,14 @@ Name: Fakhri Rasyiid
 Launch the program using the command:
 ros2 launch solution_pkg solution_launch.py
 
+files are under solution_pkg/solution_pkg:
+depth_maintain_publisher
+set_mode_client
+nav_publisher
+
+files under solution_pkg/launch:
+solution_launch.py
+
 
 
 # Probation Task: Going Through Gate with Unity Simulation
