@@ -1,3 +1,10 @@
+Name: Fakhri Rasyiid
+
+Launch the program using the command:
+ros2 launch solution_pkg solution_launch.py
+
+
+
 # Probation Task: Going Through Gate with Unity Simulation
 
 This repository contains the probation task, focusing on autonomous gate navigation using Unity simulation integrated with ROS 2.
